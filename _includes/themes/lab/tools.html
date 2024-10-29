@@ -1,0 +1,146 @@
+{% for test in site.data.tools %}
+	{% if test.title == page.tool %}
+		{% assign tool = test %}
+	{% endif %}
+{% endfor %}
+
+<div class="page-header">
+    <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
+    <p>{{ page.description }}</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="bigspacer"></div>
+        <div class="smallhead">
+            Source code
+        </div>
+        <div class="pad-left note">
+            <div class="smallspacer"></div>
+            <i class="fa fa-cog fa-fw"></i>
+            <a class="off" href="https://github.com/{{ tool.repo }}">github.com/{{ tool.repo | replace: "/", "/<wbr>" | replace: "_", "_<wbr>" }}</a>
+        </div>
+        <div class="bigspacer"></div>
+        <div class="smallhead">
+            Contributors
+        </div>
+        <div class="pad-left note">
+            {% for contributor in tool.contributors %}
+            <div class="smallspacer"></div>
+            <div>
+                <a class="off" href="{{ contributor.url }}">
+                    <img class="pull-left avatar" src="{{ contributor.avatar }}">
+                    <div class="handlebox" style="padding-left:5px;" ">
+                        {{ contributor.login }}
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="bigspacer"></div>
+        <div class="smallhead">
+            Latest commits
+        </div>
+        <div class="pad-left smallnote">
+            <ul class="list-unstyled">
+                {% for commit in tool.commits %}
+                <div class="smallspacer"></div>
+                <li>
+                    <i class="fa fa-check-square-o fa-fw"></i>
+                    <a class="off" href="{{ commit.url }}">
+                        {{ commit.date | date_to_string }} - <span class="text-gray">{{ commit.message | escape }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="spacer"></div>
+
+        {% for page in site.pages %}
+        {% if page.tool == tool.title %}
+        {% endif %}
+        {% endfor %}
+
+        {% if pagecount > 1 %}
+        {% unless tool.readme_only %}
+        <div class="smallhead">
+            Pages
+        </div>
+        <div class="pad-left smallnote">
+            <ul class="list-unstyled">
+                {% for page in site.pages %}
+                {% if page.tool == tool.title %}
+                <div class="smallspacer"></div>
+                <li>
+                    <a class="off" href="{{ page.url | replace: 'index.html', '' }}">
+                        {{ page.title | replace: '/', ' / ' | replace: tool.title, '<i class="fa fa-folder-open-o"></i> ' }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="spacer"></div>
+        {% endunless %}
+        {% endif %}
+
+    </div>
+    <div class="col-lg-8">
+        <div class="post">
+            <p>
+                {{ content }}
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<!--
+
+<div class="page-header">
+  <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>{{ page.date | date_to_long_string }}</span>
+    </div>
+    <div class="content">
+      {{ content }}
+    </div>
+    -->
+  {% unless page.categories == empty %}
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      {% assign categories_list = page.categories %}
+      {% include JB/categories_list %}
+    </ul>
+  {% endunless %}  
+
+  {% unless page.tags == empty %}
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      {% assign tags_list = page.tags %}
+      {% include JB/tags_list %}
+    </ul>
+  {% endunless %}  
+  
+    <hr>
+    <ul class="pagination">
+    {% if page.previous %}
+      <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
+    {% else %}
+      <li class="prev disabled"><a>&larr; Previous</a></li>
+    {% endif %}
+      <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
+    {% if page.next %}
+      <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
+    {% else %}
+      <li class="next disabled"><a>Next &rarr;</a>
+    {% endif %}
+    </ul>
+    <hr>
+    {% include JB/comments %}
+  </div>
+</div>
