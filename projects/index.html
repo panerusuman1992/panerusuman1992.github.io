@@ -1,0 +1,76 @@
+---
+layout: default
+title: "Research"
+description: "Research projects in the lab"
+group: navigation
+navorder: 1
+---
+
+<div class="hugespacer"></div>
+<div class="title text-center">Overview</div>
+<div class="bigspacer"></div>
+
+{% include JB/setup %}
+{% for page in site.categories.misc %}
+{% if page.overview %}
+	{% assign overviewpage = page %}
+{% endif %}
+{% endfor %}
+
+{{ overviewpage.content }}
+
+<div class="bigspacer"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <img class="research-diagram" alt="Overview of SEE Research across 1) thermo-fluid sciences, 
+             2) modeling and simulation, and 3) design innovation with societal impact.
+             External funding is provided by the U.S. NSF, DOE, and ASHRAE." src="{{ overviewpage.image }}" />
+    </div>
+</div>
+
+<div class="bigspacer"></div>
+
+<hr />
+<div class="title text-center">Projects</div>
+<div class="bigspacer"></div>
+
+{% for project in site.categories.projects %}
+
+    {% cycle 'add rows': '<div class="row">
+    ', '', '' %}
+    <div class="col-md-4 projectbox">
+        <div class="media">
+            <a class="project-image" href="{{ project.url }}">
+                <img class="media-object member-photo" src="{{ project.image }}">
+            </a>
+        </div>
+        <div class="smallhead media-heading">
+            <a href="{{ project.url }}" class="off">{{ project.title }}</a>
+        </div>
+        <div class="smallspacer"></div>
+        <!--Uncomment the below rows if want to add a small description to each page (currently not in page yaml)-->
+        <!--       <div class="note">
+            <a href="{{ project.url }}" class="off">{{ project.description }}</a>
+        </div>
+        -->
+        <div class="smallnote">
+            sponsor:
+            {{ project.sponsor }}
+        </div>
+        <div class="smallspacer"></div>
+        <div class="subtle smallnote">
+            tags:
+            {% for tag in project.tags %}
+            {{ tag }}{% if tag != project.tags.last %},{% endif %}
+            {% endfor %}
+        </div>
+        <div class="bigspacer"></div>
+        <div class="spacer"></div>
+    </div>
+    {% cycle 'close rows': '', '', '
+</div>' %}
+{% endfor %}
+{% cycle 'close rows': '', '</div>', '</div>' %}
+
+<div class="bigspacer"></div>
